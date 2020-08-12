@@ -1,0 +1,21 @@
+.QRIcon {
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-width:32px
+}
+
+.iconSize {
+  width: 32px;
+  height: 32px;
+}
+
+.iconColor {
+  stroke: var(--ion-color-primary);
+  fill: var(--ion-color-primary);
+}
+
+.flippedColor {
+  stroke: var(--ion-color-secondary);
+  fill: var(--ion-color-secondary);
+}

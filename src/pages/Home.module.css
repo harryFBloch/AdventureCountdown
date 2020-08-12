@@ -1,0 +1,54 @@
+.adventureContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 20%;
+  color: var(--ion-color-primary);
+}
+
+.timeLabel {
+  display: flex;
+  justify-content: center;
+}
+
+.number {
+  color: var(--ion-color-primary);
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.time {
+  font-size: 16px;
+  color: var(--gray);
+}
+
+.timeContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 4px;
+}
+.listContainer {
+  padding: 16px;
+  max-height: 70%;
+  overflow-y: auto;
+}
+
+.buttonContainer {
+  width: 100%;
+  padding: 16px;
+}
+
+.button {
+  white-space: pre-wrap;
+  width: 100%;
+  font-weight: bold;
+}

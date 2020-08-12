@@ -1,0 +1,9 @@
+.finished {
+  color: black;
+  background-color: var(--ion-color-success);
+}
+
+.almostfinished {
+  color: black;
+  background-color: var(--ion-color-warning);
+}

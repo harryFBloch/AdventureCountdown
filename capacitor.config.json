@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "Adventure-Countdown",
+  "appId": "com.hfbb.myCountdown",
+  "appName": "Adventure Countdown",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "build",

@@ -1,0 +1,59 @@
+.pageContainer {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+}
+
+.formContainer {
+  padding: 16px;
+  border: solid 3px var(--ion-color-secondary);
+  border-radius: 25px;
+}
+
+.centerContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.linkStyle {
+  text-decoration: underline;
+  color: var(--ion-color-secondary);
+}
+
+.topPadding {
+  padding-top: 16px;
+}
+
+.verticalCenter {
+  padding-top: 30%;
+}
+
+.note {
+  text-align: center;
+  font-size: 13px;
+}
+
+.errorNote {
+  font-size: 12px;
+  text-align: center;
+  color: var(--ion-color-primary);
+}
+
+.inputItem {
+  color: var(--ion-color-secondary);
+  --border-color: var(--ion-color-secondary);
+}
+
+.title {
+  font-weight: bold;
+}
+
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

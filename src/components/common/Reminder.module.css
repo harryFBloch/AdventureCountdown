@@ -1,0 +1,16 @@
+.container {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  width: 100%;
+}
