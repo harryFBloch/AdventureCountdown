@@ -8,3 +8,8 @@
   width: 100%;
   margin-top: 16px;
 }
+
+.reminderList {
+  max-height: 25%;
+  overflow-y: auto;
+}

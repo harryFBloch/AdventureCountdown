@@ -18,32 +18,6 @@ export interface Flags {
   toast: Toast,
 }
 
-// export const productTemplate: IAPProduct = {
-//   id:"",
-//   alias:"",
-//   type:"",
-//   state:"",
-//   title: "",
-//   description: "",
-//   priceMicros: 0,
-//   price:"",
-//   currency: "",
-//   loaded:true,
-//   canPurchase:false,
-//   owned:false,
-//   introPrice: '',
-//   introPriceMicros: undefined,
-//   introPriceNumberOfPeriods: undefined,
-//   introPriceSubscriptionPeriod: undefined,
-//   introPricePaymentMode: undefined,
-//   ineligibleForIntroPrice: undefined,
-//   downloading: false,
-//   downloaded:false,
-//   additionalData:null,
-//   transaction:null,
-//   valid:false
-// }
-
 export type FlagsAction = 
   { type: ActionType.SHOW_INTER_AD} | 
   { type: ActionType.CLOSE_INTER_AD } |

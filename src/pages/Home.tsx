@@ -1,6 +1,6 @@
-import { IonPage, IonMenuButton, IonIcon, IonContent, IonButton, IonList, IonProgressBar, IonItem, IonItemSliding, IonItemOptions, IonItemOption, IonText } from '@ionic/react';
+import { IonPage, IonIcon, IonContent, IonButton, IonList, IonProgressBar, IonItem, IonItemSliding, IonItemOptions, IonItemOption, IonText } from '@ionic/react';
 import React, { ReactElement, useEffect, useState, useRef } from 'react';
-import { RootState, ThunkDispatchType, actions, Adventures, Adventure, Toast, Product } from '../store';
+import { RootState, ThunkDispatchType, actions, Adventures, Adventure, Toast } from '../store';
 import { bindActionCreators } from 'redux';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';

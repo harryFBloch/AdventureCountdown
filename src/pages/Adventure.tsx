@@ -1,12 +1,15 @@
 import React, { ReactElement, useState, useEffect } from 'react';
-import { IonPage, IonContent, IonItem, IonInput, IonLabel, IonDatetime, IonButton } from '@ionic/react';
+import { IonPage, IonContent, IonItem, IonInput, IonLabel, IonDatetime, IonButton, IonList, IonIcon } from '@ionic/react';
 import Toolbar from '../components/common/Toolbar';
-import { AdventureTemplate, RootState, ThunkDispatchType, actions, Adventure, Adventures, Toast } from '../store';
+import { AdventureTemplate, RootState, ThunkDispatchType, actions, Adventure, Adventures, Toast, Reminder, ReminderTemplate, Reminders } from '../store';
 import classes from './Adventure.module.css';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import Loading from '../components/common/Loading';
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { trash } from 'ionicons/icons';
+import { removeNotifications } from '../store/adventures/actions';
 
 interface ReduxStateProps {
   removeAds: boolean;
@@ -43,6 +46,7 @@ export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendT
   const [title, setTitle] = useState('');
   const [note, setNote] = useState('');
   const [date, setDate] = useState('');
+  const [reminders, setReminders] = useState<Reminders>({})
 
   useEffect(() => {
     if (Object.keys(adventures).length > 0 && match.params.id) {
@@ -50,10 +54,29 @@ export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendT
       setTitle(adventure.title);
       setNote(adventure.note);
       setDate(adventure.date);
+      setReminders({...adventure.reminders})
     }
   }, [adventures, match])
+  
+  const handleSetupNotifications = () => {
+    const deletedReminders = Object.values(reminders).filter((reminder) => reminder.deleted)
+    const deletedReminderIds = deletedReminders.map((reminder) => reminder.id)
+    removeNotifications(deletedReminderIds, () => {
+      Object.values(reminders).forEach((reminder) => {
+        if (!reminder.deleted) {
+          LocalNotifications.schedule({
+            id: match.params.id ? Number(match.params.id) : Object.keys(adventures).length * 10 + Number(reminder.id),
+            title: 'Adventure Countdown',
+            text: `${reminder.daysBefore} Days Until ${title}`,
+            trigger: {at: new Date()}
+          })
+        }
+      })
+    });
+  }
 
   const handleCreateORUpdate = (): void => {
+    handleSetupNotifications()
     const adventure = match.params.id ? {...adventures[match.params.id]} : {...AdventureTemplate};
     adventure.title = title;
     adventure.note = note;
@@ -61,6 +84,36 @@ export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendT
     adventure.id = match.params.id ? match.params.id : ''
     createOrUpdateAdventure(adventure);
     sendToast({open: true, message: match.params.id ? "Updating Your Adventure" : "Starting Your New Adventure", color: 'primary'});
+  }
+
+  const renderReminderButton = (): ReactElement => {
+    const id = Object.keys(reminders).length
+    return (
+    <IonButton color="light" className={classes.button}
+    onClick={() => setReminders({...reminders, [id]: {...ReminderTemplate, id: id}})}>
+      + Add Reminder
+    </IonButton>
+    )
+  }
+
+  const renderReminders = (): ReactElement => {
+    return <IonList className={classes.reminderList}>
+      {Object.values(reminders).map((reminder) => {
+        if (!reminder.deleted) {
+          return (
+            <IonItem key={reminder.id} color="light">
+              <IonLabel>Days Before: </IonLabel>
+              <IonInput value={reminder.daysBefore} type="number" 
+              onIonChange={(e) => setReminders({...reminders, [reminder.id]: {...reminder, daysBefore: Number(e.detail.value)}})}/>
+              <IonButton fill="clear" onClick={() => setReminders({...reminders, [reminder.id]: {...reminder, deleted: true}})}>
+                <IonIcon icon={trash} slot="icon-only"/>
+              </IonButton>
+            </IonItem>
+          )
+        } else {
+          return <span key={reminder.id}></span>
+        }
+    })}</IonList>
   }
 
 
@@ -93,6 +146,9 @@ export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendT
               onIonChange={e => setDate(e.detail.value!)}></IonDatetime>
           </IonItem>
 
+          {renderReminderButton()}
+          {renderReminders()}
+
           <IonButton className={classes.button} 
           disabled={title === '' || date === ''}
           routerLink="/home" routerDirection="back" 
@@ -100,9 +156,7 @@ export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendT
             Save Adventure
           </IonButton>
 
-          <IonButton color="light" className={classes.button}>
-            + Add Reminder
-          </IonButton>
+
         </div>
       </IonContent>}
       {!adventures && <Loading /> }

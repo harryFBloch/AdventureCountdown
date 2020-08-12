@@ -1,23 +1,27 @@
 import { ActionType } from '../actionTypes';
 
+export type Reminder = {daysBefore: number, id: string, deleted: boolean}
+export type Reminders = {[id: string]: Reminder}
+
+export const ReminderTemplate: Reminder = {daysBefore: 1, id: '', deleted: false}
 
 export interface Adventure {
   date: string;
   title: string;
   note: string;
-  reminders: number[];
   adventureComplete: boolean;
   adventureDeleted: boolean;
   id: string;
   timeUntil: boolean;
   dateCreated: string;
+  reminders: Reminders;
 }
 
 export const AdventureTemplate: Adventure = {
   date: String(new Date()),
   title: '',
   note: '',
-  reminders: [],
+  reminders: {},
   adventureComplete: false,
   adventureDeleted: false,
   id: '',
