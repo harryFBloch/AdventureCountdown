@@ -88,7 +88,7 @@ export const LeftMenu = ({ initializeInter, products, subscribe, removeAds, adve
         <IonButton className={classes.productButton} onClick={restorePurchase}>Restore Purchases</IonButton>
         <IonButton className={classes.productButton} onClick={logout}>Logout</IonButton>
       </IonContent>
-      <IonToast isOpen={toast.open} color={toast.color} message={toast.message}/>
+      <IonToast isOpen={toast.open} color={toast.color} message={toast.message} position="top"/>
     </IonMenu>
   )
 }

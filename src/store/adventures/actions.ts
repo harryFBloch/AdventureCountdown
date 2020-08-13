@@ -9,8 +9,13 @@ import { Adventure } from "./types";
 export const createOrUpdateAdventure = (adventure: Adventure): ThunkResult<Promise<void>> =>
   async ( dispatch: ThunkDispatchType, getState: () => RootState ): Promise<void> => {
     dispatch({type: ActionType.CREATE_ADVENTURE, adventure: adventure})
-    const newAdventure = getState().adventures[String(Object.keys(getState().adventures).length - 1)]
-    return firebase.database().ref(`/users/${getState().auth.uid}/${newAdventure.id}`).set(newAdventure);
+    if(adventure.id === '') {
+      const newAdventure = getState().adventures[String(Object.keys(getState().adventures).length - 1)]
+      return firebase.database().ref(`/users/${getState().auth.uid}/${newAdventure.id}`).set(newAdventure);
+    } else {
+      console.log('action', adventure)
+      return firebase.database().ref(`/users/${getState().auth.uid}/${adventure.id}`).set(adventure);
+    }
 }
 
 export const getAdventures = (): ThunkResult<Promise<void>> =>
@@ -35,7 +40,9 @@ export const removeNotifications= (reminders: string[] ,callback: () => void) =>
 export const deleteAdventure = (id: string): ThunkResult<Promise<void>> =>
   async ( dispatch: ThunkDispatchType, getState: () => RootState ): Promise<void> => {
     dispatch({type: ActionType.DELETE_ADVENTURE, id: id})
-    const reminders = Object.values(getState().adventures[id].reminders)
-    removeNotifications(Object.values(reminders).map((reminder) => reminder.id), () => {})
+    if (getState().adventures[id].reminders) {
+      const reminders = Object.values(getState().adventures[id].reminders)
+      removeNotifications(Object.values(reminders).map((reminder) => reminder.id), () => {})
+    }
     return firebase.database().ref(`/users/${getState().auth.uid}/${id}/adventureDeleted`).set(true);
 }

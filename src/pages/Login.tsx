@@ -1,5 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import {withRouter, RouteComponentProps} from 'react-router-dom';
+import firebase from '../config/FirebaseConfig';
+import 'firebase/analytics';
 import { connect } from 'react-redux';
 import {
   IonInput,
@@ -40,9 +42,11 @@ export const Login = ({history, login, signUp, resetPassword}: RouteComponentPro
       signUp(email, password)
       .then((): void => {
         console.log('success')
+        firebase.analytics().logEvent('Sign up Success')
       })
       .catch((error) => {
         setErrorMessage(error.message)
+        firebase.analytics().logEvent('Sign up Fail')
       })
     } else {
       setErrorMessage('Passwords do not match!')

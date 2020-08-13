@@ -1,7 +1,9 @@
 import React, { ReactElement, useState, useEffect } from 'react';
+import firebase from '../config/FirebaseConfig';
+import 'firebase/analytics';
 import { IonPage, IonContent, IonItem, IonInput, IonLabel, IonDatetime, IonButton, IonList, IonIcon } from '@ionic/react';
 import Toolbar from '../components/common/Toolbar';
-import { AdventureTemplate, RootState, ThunkDispatchType, actions, Adventure, Adventures, Toast, Reminder, ReminderTemplate, Reminders } from '../store';
+import { AdventureTemplate, RootState, ThunkDispatchType, actions, Adventure, Adventures, Toast, ReminderTemplate, Reminders } from '../store';
 import classes from './Adventure.module.css';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -42,7 +44,7 @@ interface MatchProps extends RouteComponentProps<MatchParams>{}
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & MatchProps
 
 
-export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendToast }: Props): ReactElement => {
+export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendToast, showInter }: Props): ReactElement => {
   const [title, setTitle] = useState('');
   const [note, setNote] = useState('');
   const [date, setDate] = useState('');
@@ -63,16 +65,28 @@ export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendT
     const deletedReminderIds = deletedReminders.map((reminder) => reminder.id)
     removeNotifications(deletedReminderIds, () => {
       Object.values(reminders).forEach((reminder) => {
+        const d = new Date(date);
+        d.setDate(d.getDate() - reminder.daysBefore)
+        console.log('handleetupNotif', d)
         if (!reminder.deleted) {
           LocalNotifications.schedule({
             id: match.params.id ? Number(match.params.id) : Object.keys(adventures).length * 10 + Number(reminder.id),
             title: 'Adventure Countdown',
             text: `${reminder.daysBefore} Days Until ${title}`,
-            trigger: {at: new Date()}
+            trigger: {at: new Date(new Date().setDate(new Date(date).getDate() - reminder.daysBefore))}
           })
         }
       })
     });
+  }
+
+  const handleNotificationForAdventure = () => {
+    LocalNotifications.schedule({
+      id: 0.5,
+      title: 'Time For Your Adventure',
+      text: `${title}: ${note}`,
+      trigger: { at: new Date(date)}
+    })
   }
 
   const handleCreateORUpdate = (): void => {
@@ -82,8 +96,13 @@ export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendT
     adventure.note = note;
     adventure.date = date;
     adventure.id = match.params.id ? match.params.id : ''
+    adventure.reminders = reminders
+
     createOrUpdateAdventure(adventure);
-    sendToast({open: true, message: match.params.id ? "Updating Your Adventure" : "Starting Your New Adventure", color: 'primary'});
+    showInter();
+    sendToast({open: true, message: match.params.id ? "Updating Your Adventure" : "Starting Your New Adventure", color: 'warning'});
+    handleNotificationForAdventure();
+    firebase.analytics().logEvent('Create or Update Adventure');
   }
 
   const renderReminderButton = (): ReactElement => {
@@ -155,8 +174,6 @@ export const AddAdventure = ({ createOrUpdateAdventure, match, adventures, sendT
           onClick={handleCreateORUpdate}>
             Save Adventure
           </IonButton>
-
-
         </div>
       </IonContent>}
       {!adventures && <Loading /> }

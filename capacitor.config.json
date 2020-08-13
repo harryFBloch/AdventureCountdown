@@ -1,12 +1,12 @@
 {
-  "appId": "com.hfbb.myCountdown",
+  "appId": "com.hfb.myCountdown",
   "appName": "Adventure Countdown",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "build",
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 0
+      "launchShowDuration": 3000
     }
   },
   "cordova": {}

@@ -1,5 +1,7 @@
 import { IonPage, IonIcon, IonContent, IonButton, IonList, IonProgressBar, IonItem, IonItemSliding, IonItemOptions, IonItemOption, IonText } from '@ionic/react';
 import React, { ReactElement, useEffect, useState, useRef } from 'react';
+import firebase from '../config/FirebaseConfig';
+import 'firebase/analytics';
 import { RootState, ThunkDispatchType, actions, Adventures, Adventure, Toast } from '../store';
 import { bindActionCreators } from 'redux';
 import { RouteComponentProps } from 'react-router';
@@ -71,6 +73,7 @@ const Home = ({ showInter, removeAds, adventures, history, deleteAdventure, send
               closeList()
               sendToast({open: true, message: 'Adventure Deleted', color: 'warning'})
               deleteAdventure(adventure.id)
+              firebase.analytics().logEvent('Delete Adventure')
               }}>
             <IonIcon slot="icon-only" icon={trash}/>
         </IonItemOption>

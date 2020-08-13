@@ -30,7 +30,7 @@ export const InAppPurchaseContainer = ({ getProducts, removeAds }: Props): React
   useEffect(() => {
     // store.verbosity = InAppPurchase2.DEBUG;
     store.register({
-      id: 'removeAdsSubscription',
+      id: 'removeAds',
       type: InAppPurchase2.PAID_SUBSCRIPTION,
     })
 
@@ -39,14 +39,14 @@ export const InAppPurchaseContainer = ({ getProducts, removeAds }: Props): React
       getProducts(store.products)
     });
 
-    store.when("removeAdsSubscription").updated((product: IAPProduct) => {
+    store.when("removeAds").updated((product: IAPProduct) => {
       if (product.owned)
           removeAds()
       else
           console.log('unowned')     
     });
 
-    store.when('removeAdsSubscription')
+    store.when('removeAds')
      .approved((p: IAPProduct) => p.verify())
      .verified((p: IAPProduct) => p.finish())
      .owned((p: IAPProduct) => {

@@ -4,6 +4,7 @@ import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import firebase from './config/FirebaseConfig';
 import 'firebase/auth';
+import 'firebase/analytics';
 import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
@@ -32,6 +33,7 @@ import  AddAdventure  from './pages/Adventure';
 
 const App: React.FC = () => {
   useEffect((): void => {
+    firebase.analytics()
     //check auth status
     firebase.auth().onAuthStateChanged((user): void => {
       if (user) {
@@ -50,7 +52,7 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <AdMobContainer />
-        {/* <InAppPurchase /> */}
+        <InAppPurchase />
         <LeftMenu />
         <RightMenu />
         <IonRouterOutlet id="main" draggable={false}>
