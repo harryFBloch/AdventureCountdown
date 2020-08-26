@@ -11,7 +11,6 @@ import Toolbar from '../components/common/Toolbar';
 import classes from './Home.module.css';
 import { getTimeRemaining, percentDone } from '../utils/dates';
 import { IAPProduct } from '@ionic-native/in-app-purchase-2';
-import { subscribe } from '../store/flags/actions';
 
 interface ReduxStateProps {
   removeAds: boolean;
@@ -30,17 +29,19 @@ interface ReduxDispatchProps {
   showInter: () => Promise<void>;
   deleteAdventure: (id: string) => Promise<void>;
   sendToast: (toast: Toast) => Promise<void>;
+  subscribe: (productID: string) => Promise<void>;
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatchType): ReduxDispatchProps => bindActionCreators({
   showInter: actions.flags.showInterAd,
   deleteAdventure: actions.adventures.deleteAdventure,
-  sendToast: actions.flags.sendToast
+  sendToast: actions.flags.sendToast,
+  subscribe: actions.flags.subscribe,
 }, dispatch);
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & RouteComponentProps
 
-const Home = ({ showInter, removeAds, adventures, history, deleteAdventure, sendToast, products}: Props): ReactElement => {
+const Home = ({ showInter, removeAds, adventures, history, deleteAdventure, sendToast, products, subscribe}: Props): ReactElement => {
 
   const [trigger, setTrigger] = useState(false);
 
